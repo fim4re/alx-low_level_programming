@@ -4,7 +4,7 @@
  * main - Entry point
  *
  * Description: print a qoute using write function
- * 	write(int fd.const void *buf.size_t count)
+ *	write(int fd.const void *buf.size_t count)
  *
  * Return: Always 1 (not success)
 */
