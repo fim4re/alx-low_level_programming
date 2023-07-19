@@ -54,7 +54,7 @@ int main(void)
 		sum = (f1 + f2) % max;
 		sum_o = f1o + f2o + (f1 + f2) / max;
 		f1 = f2;
-		f10 = f2o;
+		f1o = f2o;
 		f2 = sum;
 		f2o = sum_o;
 
