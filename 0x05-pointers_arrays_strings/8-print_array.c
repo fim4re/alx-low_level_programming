@@ -1,4 +1,4 @@
-#include "main"
+#include "main.h"
 /**
  * print_array - prints n element of an array of integers
  * Owned by Bwave
