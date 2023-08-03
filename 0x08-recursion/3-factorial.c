@@ -1,6 +1,6 @@
-#iclude "main.h"
+#include "main.h"
 /**
- * factorial - fonds factorial
+ * factorial - finds factorial
  * @n: int
  * return: int
 */
