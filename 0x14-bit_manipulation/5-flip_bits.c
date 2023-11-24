@@ -8,7 +8,7 @@
 */
 unsigned int flip_bits(unsigned long int nb, unsigned long int sc)
 {
-	unsigned long int value = nb * sc;
+	unsigned long int value = nb ^ sc;
 	unsigned int cnt = 0;
 
 	while (value)
@@ -17,6 +17,6 @@ unsigned int flip_bits(unsigned long int nb, unsigned long int sc)
 			cnt++;
 		value = value >> 1;
 	}
-	return (cnt)
+	return (cnt);
 
 }
