@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <elf.h>
 
-#define READ_BUFFER_SIZE 1024
+#define READ_BUF_SIZE 1024
 
 int _putchar(char c);
 int create_file(const char *filename, char *text_content);
