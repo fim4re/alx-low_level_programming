@@ -28,7 +28,7 @@ int main(int ac, char **av)
 
 	if (from_fd == -1)
 		dprintf(STDERR_FILENO, ERR_NOREAD, AV[1]);
-	exixt(98);
+	exit(98);
 	to_fd = open(av[2], O_WRONLY | O_CREAT | O_TRUNC, PERMISSIONS);
 
 	if (to_fd == -1)
