@@ -19,7 +19,7 @@ int main(int ac, char **av)
 {
 	int from_fd = 0, to_fd = 0;
 	ssize_t r;
-	char buffer[READ_BUF_SIZE];
+	char buf[READ_BUF_SIZE];
 
 	if (ac != 3)
 		dprintf(STDERR_FILENO, USAGE), exit(97);
@@ -32,8 +32,8 @@ int main(int ac, char **av)
 	if (to_fd == -1)
 		dprintf(STDERR_FILENO, ERR_NOWRITE, av[2]), exit(99);
 
-	while ((r = read(from_fd, buffer, READ_BUF_SIZE)) > 0)
-		if (write(to_fd, buffer, r) != r)
+	while ((r = read(from_fd, buf, READ_BUF_SIZE)) > 0)
+		if (write(to_fd, buf, r) != r)
 			dprintf(STDERR_FILENO, ERR_NOWRITE, av[2]), exit(99);
 
 	if (r == -1)
