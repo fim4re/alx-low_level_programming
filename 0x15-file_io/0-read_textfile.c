@@ -32,6 +32,10 @@ ssize_t read_textfile(const char *filename, size_t letters)
 	}
 
 	rd_check = read(file, buffer, letters);
+	if (rd_check == -1)
+		return (0);
+
+	wcnt = write(STDOUT_FILENO, buffer, rd_check);
 	if (wcnt == -1 || rd_check != wcnt)
 		return (0);
 
