@@ -2,52 +2,114 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define USAGE "Usage: cp file_from file_to\n"
-#define ERR_NOREAD "Error: Cant't red from file %s\n"
-#define ERR_NOWRITE "Error: Can't write to %s\n"
-#define ERR_NOCLOSE "Error: Can't close fd %d\n"
-#define PERMISSIONS (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH)
+/**
+ * check97 - checks for correct number of arg
+ * @ac: number arg
+ *
+ * Return: void
+*/
+void check97(int ac)
+{
+	if (ac != 3)
+	{
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+		exit(97);
+	}
+}
 
 /**
- * main - program that copies the content of a file to another
- * @argc: arg count
- * @argv: arg vector
+ * check98 - checks file_from exist and be read
+ * @check: checks if true
+ * @file: name
+ * @fd_from: fd file_from, or -1
+ * @fd_to: fd of file_to, or -1
  *
- * Return: 1 on success 0 on failure
+ * Return: void
 */
-int main(int argc, char *argv[])
+void check98(ssize_t check, char *file, int fd_from, int fd_to)
 {
-	int from_fd = 0, to_fd = 0;
-	ssize_t c;
-	char buf[READ_BUF_SIZE];
+	if (check == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file);
+		if (fd_from != -1)
+			close(fd_from);
+		if (fd_to != -1)
+			close(fd_to);
+		exit(98);
+	}
+}
 
-	if (argc != 3)
-		dprintf(STDERR_FILENO, USAGE), exit(97);
-	from_fd = open(argv[1], O_RDONLY);
+/**
+ * check99 - checks file_to was created can be written to
+ * @check: checks if true
+ * @file: name
+ * @fd_from: fd of file_from, or -1
+ * @fd_to: fd of file_to, or -1
+ *
+ * Return: void
+*/
+void check99(ssize_t check, char *file, int fd_from, int fd_to)
+{
+	if (check == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file);
+		if (fd_from)
+			close(fd_from);
+		if (fd_to != -1)
+			close(fd_to);
+		exit(99);
+	}
+}
 
-	if (from_fd == -1)
-		dprintf(STDERR_FILENO, ERR_NOREAD, argv[1]), exit(98);
-	to_fd = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, PERMISSIONS);
+/**
+ * check100 - checks fd were closed
+ * @check: checks if true
+ * @fd: fd
+ *
+ * Return: void
+*/
+void check100(int check, int fd)
+{
+	if (check == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		exit(100);
+	}
+}
 
-	if (to_fd == -1)
-		dprintf(STDERR_FILENO, ERR_NOWRITE, argv[2]), exit(99);
+/**
+ * main - program copies the content of a file to another
+ * @ac: number of arg
+ * @av: array arg
+ *
+ * Return: 0 on success
+*/
+int main(int ac, char *av[])
+{
+	int fd_from, fd_to, close_to, close_from;
+	ssize_t lenr, lenw;
+	char buffer[1024];
+	mode_t file_perm;
 
-	while ((c = read(from_fd, buf, READ_BUF_SIZE)) > 0)
-		if (write(to_fd, buf, c) != c)
-			dprintf(STDERR_FILENO, ERR_NOWRITE, argv[2]), exit(99);
-
-	if (c == -1)
-		dprintf(STDERR_FILENO, ERR_NOREAD, argv[1]), exit(98);
-
-	from_fd = close(from_fd);
-	to_fd = close(to_fd);
-
-	if (from_fd)
-		dprintf(STDERR_FILENO, ERR_NOCLOSE, from_fd), exit(100);
-
-	if (to_fd)
-		dprintf(STDERR_FILENO, ERR_NOCLOSE, to_fd), exit(100);
-
-	return (EXIT_SUCCESS);
-
+	check97(ac);
+	fd_from = open(av[1], O_RDONLY);
+	check98((ssize_t)fd_from, av[1], -1, -1);
+	file_perm = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
+	fd_to = open(av[2], O_WRONLY | O_CREAT | O_TRUNC, file_perm);
+	check99((ssize_t)fd_to, av[2], fd_from, -1);
+	lenr = 1024;
+	while (lenr == 1024)
+	{
+		lenr = read(fd_from, buffer, 1024);
+		check98(lenr, av[1], fd_from, fd_to);
+		lenw = write(fd_to, buffer, lenr);
+		if (lenw != lenr)
+			lenw = -1;
+		check99(lenw, av[2], fd_from, fd_to);
+	}
+	close_to = close(fd_to);
+	close_from = close(fd_from);
+	check100(close_to, fd_to);
+	check100(close_from, fd_from);
+	return (0);
 }
