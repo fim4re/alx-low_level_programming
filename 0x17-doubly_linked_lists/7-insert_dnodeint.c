@@ -15,7 +15,12 @@ dlistint_t *insert_dnodeint_at_index(dlistint_t **h, unsigned int idx, int n)
 	{
 		if (!*h)
 			*h = create_dnode(n, NULL, NULL);
-		return (add_dnodeint(h, n));
+		else
+		{
+			(*h)->prev = create_dnode(n, NULL, *h);
+			*h = (*h)->prev;
+		}
+		return (*h);
 	}
 
 	for (; idx != 1; idx--)
