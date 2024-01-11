@@ -1,10 +1,10 @@
 #include "lists.h"
 
 /**
- * insert_dnodeint_at_index - inserts a new node at a given position
- * @h: head of doubly-linked list
- * @idx: index for insertion of new node
- * @n: data for new node
+ * insert_dnodeint_at_index - inserts a new node
+ * @h: pointer of hesd
+ * @idx: insert new node
+ * @n: new node
  * Return: address of new node or NULL if error
  */
 dlistint_t *insert_dnodeint_at_index(dlistint_t **h, unsigned int idx, int n)
@@ -12,16 +12,7 @@ dlistint_t *insert_dnodeint_at_index(dlistint_t **h, unsigned int idx, int n)
 	dlistint_t *node = *h, *new;
 
 	if (idx == 0)
-	{
-		if (!*h)
-			*h = create_dnode(n, NULL, NULL);
-		else
-		{
-			(*h)->prev = create_dnode(n, NULL, *h);
-			*h = (*h)->prev;
-		}
-		return (*h);
-	}
+		return (add_dnodeint(h, n));
 
 	for (; idx != 1; idx--)
 	{
