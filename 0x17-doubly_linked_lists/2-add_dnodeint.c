@@ -4,7 +4,7 @@
 /**
  * add_dnodeint - add new head to list
  * @head: pointer adress
- * @n: element 
+ * @n: element
  * Return: new node
  */
 
