@@ -25,5 +25,7 @@ void hash_table_delete(hash_table_t *hash_t)
 		}
 	}
 	free(hash_t->array);
+	hash_t->array = NULL;
+	hash_t->size = 0;
 	free(hash_t);
 }
