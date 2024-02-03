@@ -88,7 +88,7 @@ int shash_table_set(shash_table_t *hash_t, const char *key, const char *value)
 	{
 		node_n->sprev = NULL;
 		node_n->snext = NULL;
-		hash_t->shead = new_n;
+		hash_t->shead = node_n;
 		hash_t->stail = node_n;
 	}
 	else if (strcmp(hash_t->shead->key, key) > 0)
